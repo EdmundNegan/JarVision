@@ -1,0 +1,4 @@
+# Ignore environment file
+.env
+# Ignore virtual environmen
+jarvis_env/
