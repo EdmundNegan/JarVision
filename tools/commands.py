@@ -1,13 +1,5 @@
 from langchain_core.tools import tool
 from openai import OpenAI
-from detection import find_faces_dnn, detect_objects_yolo, vs
-from robot_control import move_to_face, set_lookorigin
-
-# Flag to indicate if face tracking is active
-FACE_TRACKING = False
-# Flag to indicate if object tracking is active
-OBJECT_TRACKING = False
-
 
 import time
 import socket

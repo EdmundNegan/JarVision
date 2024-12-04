@@ -75,8 +75,6 @@ tools = [
     commands.send_command_to_robot,
     commands.generate_urscript,
     commands.describe_vision,
-    commands.track_face_tool,
-    commands.track_object_tool,
 ]
 
 assistant_runnable = assistant_prompt | llm.bind_tools(tools)

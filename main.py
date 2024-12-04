@@ -73,7 +73,7 @@ def show_video():
 def chatbot_interaction():
     """Handle chatbot interaction."""
     global running, mode
-    print("Welcome to the UR Agent Chatbot! Type 'exit' to quit.")
+    print("Welcome to the UR Agent Chatbot!\nType 'face' to switch to face tracking mode or 'object' to switch to object detection mode.\nType 'exit' to quit the program.") 
     while running:
         question = input("You: ").strip()
         if question.lower() == 'exit':
@@ -83,10 +83,10 @@ def chatbot_interaction():
         with lock:
             if "face" in question.lower():
                 mode = "face"
-                print("Agent: Switching to face tracking mode.")
+                print("Agent: Switching to face tracking mode.\nPress 'ESC' to switch back to chatbot mode.")
             elif "object" in question.lower():
                 mode = "object"
-                print("Agent: Switching to object detection mode.")
+                print("Agent: Switching to object detection mode.\nPress 'ESC' to switch back to chatbot mode.")
             else:
                 response = convo.handle_conversation(question)
                 print(f"Agent: {response}")
