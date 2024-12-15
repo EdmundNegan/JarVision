@@ -1,4 +1,7 @@
 # Ignore environment file
 .env
-# Ignore virtual environmen
+# Ignore virtual environment
 jarvis_env/
+
+captured_frame.jpg
+ur_log/

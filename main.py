@@ -56,15 +56,12 @@ def show_video():
         else:  # Default mode
             cv2.imshow("Robot Camera View", frame)
 
-        # Exit or switch mode
+        # Exit face/object tracking mode
         key = cv2.waitKey(1) & 0xFF
         if key == 27:  # ESC key to switch back to chatbot
             with lock:
                 mode = "chatbot"
             print("Switching back to chatbot mode.")
-        elif key == ord('q'):  # 'q' key to quit the program
-            running = False
-            break
 
     cv2.destroyAllWindows()
     vs.stop()
