@@ -12,18 +12,6 @@ client = OpenAI()
 host = init.HOST
 port = int(init.PORT)
 
-workspace_limits = {
-    "reach_radius": 0.5,  # Maximum reach in meters
-    "joint_limits": {
-        "base": [-6.28, 6.28],       # J1 in radians
-        "shoulder": [-3.14, 3.14],   # J2 in radians
-        "elbow": [-3.14, 3.14],      # J3 in radians
-        "wrist1": [-6.28, 6.28],     # J4 in radians
-        "wrist2": [-6.28, 6.28],     # J5 in radians
-        "wrist3": [-6.28, 6.28]      # J6 in radians
-    }
-}
-
 home_position = [0.0, -1.36136, -1.62316, -0.26180, 1.57080, 0.0]
 
 def encode_image(image_path):
