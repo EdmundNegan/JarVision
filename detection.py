@@ -39,7 +39,7 @@ if sys.platform == "linux":
     import picamera
     from picamera.array import PiRGBArray
     RASPBERRY_BOOL = True
-vs = VideoStream(src= 0 ,
+vs = VideoStream(src= 1 ,            # Change to 0 if using default camera 
                  usePiCamera= RASPBERRY_BOOL,
                  resolution=video_resolution,
                  framerate = 13,

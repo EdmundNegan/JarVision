@@ -46,7 +46,7 @@ def move_to_face(list_of_facepos,robot_pos, robot, origin):
     face_from_center = list(list_of_facepos[0])  # TODO: find way of making the selected face persistent
 
     prev_robot_pos = robot_pos
-    scaled_face_pos = [-face_from_center[0] * m_per_pixel, face_from_center[1] * m_per_pixel]  # Invert only the x direction
+    scaled_face_pos = [face_from_center[0] * m_per_pixel, face_from_center[1] * m_per_pixel]  
 
     robot_target_xy = [a + b for a, b in zip(prev_robot_pos, scaled_face_pos)]
     # print("..", robot_target_xy)
