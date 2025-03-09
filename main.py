@@ -44,12 +44,18 @@ def show_video():
         if current_mode == "face":
             target_positions, new_frame = find_faces_dnn(frame)
             if target_positions:
+                face_x, face_y = target_positions[0]
+                depth = get_depth_value_at(face_x, face_y)
+                print(f"Face is approximately {depth} mm away.")
                 robot_position = move_to_face(target_positions, robot_position, robot, origin)
             cv2.imshow("Face Tracking", new_frame)
 
         elif current_mode == "object":
             target_positions, labels, new_frame = detect_objects_yolo(frame)
             if target_positions:
+                object_x, object_y = target_positions[0]
+                depth = get_depth_value_at(object_x, object_y)
+                print(f"Object is approximately {depth} mm away.")
                 robot_position = move_to_face(target_positions, robot_position, robot, origin)
             cv2.imshow("Object Tracking", new_frame)
 
