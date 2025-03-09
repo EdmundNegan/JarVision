@@ -7,3 +7,5 @@ captured_frame.jpg
 ur_log/
 /__pycache__
 /ur_log
+*.log
+/__pycache__

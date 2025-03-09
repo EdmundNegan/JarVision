@@ -8,6 +8,7 @@ import numpy as np
 from imutils.video import VideoStream
 import time
 import sys
+import pykinect_azure as pykinect
 
 
 model = YOLO("yolov8n.pt")  # Adjust path if needed
@@ -35,11 +36,18 @@ video_viewangle_hor = math.radians(25)  # Camera FOV (field of fiew) angle in ra
 RASPBERRY_BOOL = False
 # If this is run on a linux system, a picamera will be used.
 # If you are using a linux system, with a webcam instead of a raspberry pi delete the following if-statement
+# --- Kinect Depth Camera Initialization ---
+""" pykinect.initialize_libraries()
+depth_config = pykinect.default_configuration
+depth_config.color_resolution = pykinect.K4A_COLOR_RESOLUTION_OFF
+depth_config.depth_mode = pykinect.K4A_DEPTH_MODE_WFOV_2X2BINNED
+depth_device = pykinect.start_device(config=depth_config) """
+
 if sys.platform == "linux":
     import picamera
     from picamera.array import PiRGBArray
     RASPBERRY_BOOL = True
-vs = VideoStream(src= 1 ,            # Change to 0 if using default camera 
+vs = VideoStream(src= 0,            # Change to 0 if using default camera 
                  usePiCamera= RASPBERRY_BOOL,
                  resolution=video_resolution,
                  framerate = 13,
@@ -51,6 +59,17 @@ vs = VideoStream(src= 1 ,            # Change to 0 if using default camera
 time.sleep(0.2)
 
 """FUNCTIONS _____________________________________________________________________________"""
+def get_depth_value_at(x, y):
+    """
+    Uses the Kinect device to capture a depth frame and returns the depth at pixel (x, y).
+    """
+    """ capture = depth_device.update()
+    ret, depth_frame = capture.get_depth_image()
+    if ret:
+        return depth_frame[y, x]
+    else:
+        return None """
+    
 def detect_objects_yolo(frame):
     """
     Detects objects using YOLOv8 and returns their positions, labels, and annotated frame.

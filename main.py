@@ -2,7 +2,7 @@
 import math
 import time
 import cv2
-from detection import find_faces_dnn, detect_objects_yolo
+from detection import find_faces_dnn, detect_objects_yolo, get_depth_value_at
 from detection import vs  # Ensure vs is properly initialized in detection module
 from robot_control import set_lookorigin, move_to_face 
 import conversation_handler as convo
@@ -14,7 +14,7 @@ from imutils.video import VideoStream
 ACCELERATION = 0.4  # Robot acceleration value
 VELOCITY = 0.4  # Robot speed value
 # The Joint position the robot starts at
-robot_startposition = (math.radians(0),
+robot_startposition = (math.radians(-90),
                     math.radians(-78),
                     math.radians(-93),
                     math.radians(-15),
@@ -44,12 +44,18 @@ def show_video():
         if current_mode == "face":
             target_positions, new_frame = find_faces_dnn(frame)
             if target_positions:
+                face_x, face_y = target_positions[0]
+                # depth = get_depth_value_at(face_x, face_y)
+                # print(f"Face is approximately {depth} mm away.")
                 robot_position = move_to_face(target_positions, robot_position, robot, origin)
             cv2.imshow("Face Tracking", new_frame)
 
         elif current_mode == "object":
             target_positions, labels, new_frame = detect_objects_yolo(frame)
             if target_positions:
+                object_x, object_y = target_positions[0]
+                # depth = get_depth_value_at(object_x, object_y)
+                # print(f"Object is approximately {depth} mm away.")
                 robot_position = move_to_face(target_positions, robot_position, robot, origin)
             cv2.imshow("Object Tracking", new_frame)
 
