@@ -39,7 +39,7 @@ class Assistant:
                 break
         return {"messages": result}
 
-llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.5)
+llm = ChatOpenAI(model="gpt-4o", temperature=0.5)
 
 assistant_prompt = ChatPromptTemplate.from_messages(
     [

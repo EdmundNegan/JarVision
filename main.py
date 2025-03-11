@@ -1,4 +1,3 @@
-# Description: This is the main script for the face tracking robot. It uses the URBasic library to control the robot and OpenCV to detect faces and objects in the video stream.
 import math
 import time
 import cv2
@@ -6,6 +5,7 @@ import threading
 import sys
 import json
 import os
+import pyttsx3  # Added for text-to-speech
 
 from detection import find_faces_dnn, detect_objects_yolo
 from detection import vs  # Ensure vs is properly initialized in detection module
@@ -20,26 +20,45 @@ import pyaudio
 
 import components.initializer as init
 
-"""SETTINGS AND VARIABLES ________________________________________________________________"""
+# ---------------------------
+# Text-to-Speech Function
+# ---------------------------
+def speak_text(text):
+    """
+    Convert text to speech using pyttsx3.
+    This function initializes the engine, adjusts the speech rate, and speaks out the provided text.
+    """
+    engine = pyttsx3.init()
+    rate = engine.getProperty('rate')
+    engine.setProperty('rate', rate - 25)  # Slow down a bit if needed
+    engine.say(text)
+    engine.runAndWait()
+
+# ---------------------------
+# SETTINGS AND VARIABLES
+# ---------------------------
 ACCELERATION = 0.4  # Robot acceleration value
-VELOCITY = 0.4  # Robot speed value
+VELOCITY = 0.4      # Robot speed value
 # The Joint position the robot starts at
 robot_startposition = (math.radians(0),
-                    math.radians(-78),
-                    math.radians(-93),
-                    math.radians(-15),
-                    math.radians(90),
-                    math.radians(0))
+                       math.radians(-78),
+                       math.radians(-93),
+                       math.radians(-15),
+                       math.radians(90),
+                       math.radians(0))
 # Global variables
 running = True
 mode = "chatbot"
 lock = threading.Lock()
 robot_position = [0, 0]
 
+# ---------------------------
+# VIDEO STREAM HANDLING
+# ---------------------------
 def show_video():
     """Continuously show the video stream and handle modes."""
     global running, mode, robot_position
-    current_mode = None # keep track of current mode
+    current_mode = None  # Keep track of current mode
     while running:
         frame = vs.read()
         if frame is None:
@@ -66,44 +85,46 @@ def show_video():
         else:  # Default mode
             cv2.imshow("Robot Camera View", frame)
 
-        # Exit face/object tracking mode
+        # Check for ESC key to switch back to chatbot mode
         key = cv2.waitKey(1) & 0xFF
-        if key == 27:  # ESC key to switch back to chatbot
+        if key == 27:  # ESC key pressed
             with lock:
                 mode = "chatbot"
-            print("Switching back to chatbot mode.")
+            speak_text("Switching back to chatbot mode.")
 
     cv2.destroyAllWindows()
     vs.stop()
 
-
-"""CONVERSATION THREADS__________________________________________________________________"""
+# ---------------------------
+# CONVERSATION THREADS
+# ---------------------------
 def text_conversation():
-    """Handle text-based chatbot interaction."""
+    """Handle text-based chatbot interaction with voice output."""
     global running, mode
-    print("Welcome to the UR Agent Chatbot!")
-    print("Type 'face' to switch to face tracking mode or 'object' to switch to object detection mode.")
-    print("Type 'exit' to quit the program.")
+    welcome_message = (
+        "Welcome to the UR Agent Chatbot! "
+        "Type 'face' to switch to face tracking mode or 'object' to switch to object detection mode. "
+        "Type 'exit' to quit the program."
+    )
+    speak_text(welcome_message)
     while running:
         question = input("You: ").strip()
         if question.lower() == 'exit':
+            speak_text("Goodbye!")
             running = False
             break
 
         with lock:
             if "face" in question.lower():
                 mode = "face"
-                print("Agent: Switching to face tracking mode.\nPress 'ESC' to switch back to chatbot mode.")
+                speak_text("Switching to face tracking mode. Press ESC to switch back to chatbot mode.")
             elif "object" in question.lower():
                 mode = "object"
-                print("Agent: Switching to object detection mode.\nPress 'ESC' to switch back to chatbot mode.")
+                speak_text("Switching to object detection mode. Press ESC to switch back to chatbot mode.")
             else:
                 response = convo.handle_conversation(question)
-                print(f"Agent: {response}")
+                speak_text(response)
 
-# ------------------------------
-# Voice Input Initialization
-# ------------------------------
 def init_voice_input():
     """
     Initialize the Vosk model and audio stream.
@@ -118,7 +139,7 @@ def init_voice_input():
                       rate=16000,
                       input=True,
                       frames_per_buffer=8192)
-    print("AUDIO MODEL COMPILE SUCCESS -- READY FOR AUDIO")
+    speak_text("Audio model compiled successfully. Ready for audio.")
     stream.start_stream()
     return stream, recognizer
 
@@ -143,34 +164,34 @@ def speechToText(stream, recognizer):
                 return recognized_text
 
 def voice_conversation():
-    """Handle voice-based chatbot interaction."""
+    """Handle voice-based chatbot interaction with voice output."""
     global running, mode
-    print("Welcome to the UR Agent Voice Interface! Say 'quit' or 'exit' to stop.")
+    speak_text("Welcome to the UR Agent Voice Interface! Say 'quit' or 'exit' to stop.")
     stream, recognizer = init_voice_input()
 
     while running:
         user_input = speechToText(stream, recognizer)
         if user_input is None:
-            print("Goodbye!")
+            speak_text("Goodbye!")
             running = False
             break
 
         with lock:
             if "face" in user_input:
                 mode = "face"
-                print("Agent: Switching to face tracking mode.\nPress 'ESC' to switch back to chatbot mode.")
+                speak_text("Switching to face tracking mode. Press ESC to switch back to chatbot mode.")
             elif "object" in user_input:
                 mode = "object"
-                print("Agent: Switching to object detection mode.\nPress 'ESC' to switch back to chatbot mode.")
+                speak_text("Switching to object detection mode. Press ESC to switch back to chatbot mode.")
             else:
                 response = convo.handle_conversation(user_input)
-                print(f"Agent: {response}")
+                speak_text(response)
 
-
-
-"""MAIN EXECUTION BLOCK__________________________________________________________________"""
+# ---------------------------
+# MAIN EXECUTION BLOCK
+# ---------------------------
 if __name__ == "__main__":
-    # Choose conversation mode based on a command-line argument:
+    # Choose conversation mode based on a command-line argument.
     # Run with "voice" to use voice input; otherwise, text input is used.
     conversation_mode = "voice"
     if len(sys.argv) > 1 and sys.argv[1].lower() == "voice":
@@ -179,7 +200,7 @@ if __name__ == "__main__":
     # Initialize the robot and socket connection
     robot, socket_connection = initialize_robot()
     if not (robot and socket_connection):
-        print("Failed to initialize robot")
+        speak_text("Failed to initialize robot.")
         exit(1)
 
     robot.reset_error()
