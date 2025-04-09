@@ -1,6 +1,9 @@
 import components.initializer as init
 import URBasic
 import socket
+import sys
+import ast
+
 
 def initialize_robot():
     """
@@ -36,4 +39,3 @@ def initialize_robot():
         print(f"Error initializing robot: {e}")
         s.close()
         return None, None
-

@@ -37,17 +37,17 @@ RASPBERRY_BOOL = False
 # If this is run on a linux system, a picamera will be used.
 # If you are using a linux system, with a webcam instead of a raspberry pi delete the following if-statement
 # --- Kinect Depth Camera Initialization ---
-pykinect.initialize_libraries()
-depth_config = pykinect.default_configuration
-depth_config.color_resolution = pykinect.K4A_COLOR_RESOLUTION_OFF
-depth_config.depth_mode = pykinect.K4A_DEPTH_MODE_WFOV_2X2BINNED
-depth_device = pykinect.start_device(config=depth_config)
+# pykinect.initialize_libraries()
+# depth_config = pykinect.default_configuration
+# depth_config.color_resolution = pykinect.K4A_COLOR_RESOLUTION_OFF
+# depth_config.depth_mode = pykinect.K4A_DEPTH_MODE_WFOV_2X2BINNED
+# depth_device = pykinect.start_device(config=depth_config)
 
 if sys.platform == "linux":
     import picamera
     from picamera.array import PiRGBArray
     RASPBERRY_BOOL = True
-vs = VideoStream(src= 1,            # Change to 0 if using default camera 
+vs = VideoStream(src= 0,            # Change to 0 if using default camera 
                  usePiCamera= RASPBERRY_BOOL,
                  resolution=video_resolution,
                  framerate = 13,
