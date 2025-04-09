@@ -63,41 +63,54 @@ The system architecture includes the following components:
     pip install -r requirements.txt
 
 For Virtual Environment 
-5. Download the latest version of Oracle VirtualBox from https://www.virtualbox.org/ (or your preferred virtualization software).
-6. Download the offline simulator for the UR3e robotic arm from Universal Robots https://www.universal-robots.com/download/software-e-series/simulator-non-linux/offline-simulator-e-series-ur-sim-for-non-linux-5126-lts/.
-7. Set the virtual machine network type to "host only Ethernet adapter".
+5. Download the latest version of Oracle VirtualBox from https://www.virtualbox.org/ (or your preferred virtualization software).  
+
+6. Download the offline simulator for the UR3e robotic arm from Universal Robots https://www.universal-robots.com/download/software-e-series/simulator-non-linux/offline-simulator-e-series-ur-sim-for-non-linux-5126-lts/.  
+
+7. Set the virtual machine network type to "host only Ethernet adapter".  
+
 8. Find the IP address of the robot in URSim by clicking URSim UR3 and selecting the "About" option.
-![Robot IP](images/Robot_IP.png)
+![Robot IP](images/Robot_IP.png)  
+
 9. Create a .env file in the project root directory with the following format:
     ```plaintext
     OPENAI_API_KEY=<insert api key>
     TAVILY_API_KEY=<insert api key>
     HOST='<insert robot ip>'
     PORT='30002'
-    VOSK_MODEL='PATH_TO_VOSK_MODEL'
+    VOSK_MODEL='PATH_TO_VOSK_MODEL'  
+
 10. Set the payload to an arbitrary number like 0.1kg and start the robot.
-![Start Robot](/images/Starting_Robot.png)
+![Start Robot](/images/Starting_Robot.png)  
+
 11. Run the main.py file to begin issuing commands to the robotic arm (select chatbot or voice mode and use default camera settings)
 ![main.py](images/vision_1.png)
 ![face tracking](images/face_tracking.png)
 
 For Physical Robot
 5. Connect UR3e robotic arm to power supply and start up system
-![Start Robot](/images/Starting_Robot_Physical.png)
-6. Connect UR3e robotic arm to host computer via ethernet cable and connect Azure Kinect camera to host computer via USB-C cable
+![Start Robot](/images/Starting_Robot_Physical.png)  
+
+6. Connect UR3e robotic arm to host computer via ethernet cable and connect Azure Kinect camera to host computer via USB-C cable  
+
 7. Find the IP address of the robot in URSim by selecting the "About" option.
-![Robot IP](images/Robot_IP.png)
+![Robot IP](images/Robot_IP.png)  
+
 8. Create a .env file in the project root directory with the following format:
     ```plaintext
     OPENAI_API_KEY=<insert api key>
     TAVILY_API_KEY=<insert api key>
     HOST='<insert physical robot ip>'
     PORT='30002'
-    VOSK_MODEL='PATH_TO_VOSK_MODEL'
+    VOSK_MODEL='PATH_TO_VOSK_MODEL'  
+
 9. Go to network settings and manually configure IP assignment to settings shown
-![Network Config](images/network_config.png)
-10. Run the main.py file to begin issuing commands to the physical robotic arm (select chatbot or voice mode and use Kinect camera settings)
-![UR3e Physical Robot](images/UR3e%20in%20lab.png)
+![Network Config](images/network_config.png)  
+
+10. Run the main.py file to begin issuing commands to the physical robotic arm (select chatbot or voice mode and use Kinect camera settings)  
+
+![UR3e Physical Robot](images/UR3e%20in%20lab.png)  
+
 ## Future Work
 - Upload short videos to the Vision API for enhanced environmental understanding.
 - Integrate tracking functionalities (track_face, track_object) as modular LangChain tools.
